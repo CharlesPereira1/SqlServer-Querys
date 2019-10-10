@@ -1,0 +1,63 @@
+CREATE       PROCEDURE [dbo].[SP_EXCLUI_GLOGIN]
+
+AS
+
+DECLARE @dbid as int
+DECLARE @computer varchar(40)
+DECLARE @sistema varchar(40)
+DECLARE @time as datetime
+DECLARE @id as int
+DECLARE @letra varchar(1)
+
+select @dbid = (select dbid from master.dbo.sysdatabases where name = 'corporerm')
+
+DECLARE glogin_cursor CURSOR
+FOR
+   SELECT COMPUTERNAME, CODSISTEMA, LOGINTIME, LOGINID 
+   FROM CORPORERM.DBO.GLOGIN
+OPEN glogin_cursor
+
+FETCH NEXT FROM glogin_cursor INTO @computer, @letra, @time, @id
+WHILE (@@FETCH_STATUS <> -1)
+BEGIN
+   IF (@@FETCH_STATUS <> -2)
+   BEGIN   
+      SELECT @sistema = 
+         (case @letra
+           when 'A' then 'RM Chronus'
+           when 'B' then 'RMTestis'  
+           when 'C' then 'RM Saldus' 
+           when 'D' then 'RM Liber' 
+           when 'E' then 'RM Classis Ensino Básico'
+           when 'F' then 'RM Fluxus'
+           when 'H' then 'RM Agilis'
+           when 'I' then 'RM Bonum' 
+           when 'K' then 'RM Factor' 
+           when 'L' then 'RM Biblios' 
+           when 'M' then 'RM Solum' 
+           when 'O' then 'RM Saúde' 
+           when 'P' then 'RM Labore' 
+           when 'Q' then 'RM Bis' 
+           when 'T' then 'RM Nucleus' 
+           when 'U' then 'RM Classis Ensino Superior' 
+           when 'V' then 'RM Vitae' 
+           else '' 
+          end)
+      
+      IF (SELECT COUNT(*)  from master.dbo.sysprocesses
+          where hostname = @computer
+            and program_name = @sistema
+--            and convert(varchar(16),login_time,20) = convert(varchar(16),@time,20)
+            and dbid = @dbid) = 0
+      BEGIN
+        BEGIN
+            DELETE GLOGIN WHERE LOGINID = @ID
+        END
+      END
+
+
+   END
+   FETCH NEXT FROM glogin_cursor INTO @computer, @letra, @time, @id
+END
+CLOSE glogin_cursor
+DEALLOCATE glogin_cursor

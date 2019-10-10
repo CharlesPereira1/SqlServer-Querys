@@ -1,0 +1,29 @@
+select B.CHAPA, B.NOME, B.CODSECAO,A.MENSAGEMRETORNO  
+from PESOCIALEVENTOS A
+INNER JOIN PFUNC B ON A.CHAPA = B.CHAPA 
+ where 
+ A.tipoevento='s-2200'
+  AND A.STATUS =9
+  ORDER BY B.CODSECAO, B.NOME
+
+
+  SELECT * FROM PESOCIALEVENTOS
+
+
+
+  SELECT A.CHAPA FROM PESOCIALEVENTOS A
+	INNER JOIN PFUNC B ON A.CHAPA = B.CHAPA AND A.CODCOLIGADA = B.CODCOLIGADA
+	WHERE
+	B.CODFILIAL IN (2,4,5,6,7)
+
+
+	SELECT * FROM pfunc
+
+
+	 SELECT c.chapa, c.nome, c.CODSECAO, c.CODSITUACAO FROM ahorario a
+	 left join pfunc c on c.codhorario = a.codigo
+	 WHERE
+	a.codigo='0124'
+	--c.CODFILIAL IN (2,4,5,6,7)
+	and a.tipoevento ='s-1050'
+

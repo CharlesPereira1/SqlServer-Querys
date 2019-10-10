@@ -1,0 +1,1 @@
+update TTMV set GERAMOVPED=0 where CODCOLIGADA=1 and CODTMV= /*numero do movimento*/

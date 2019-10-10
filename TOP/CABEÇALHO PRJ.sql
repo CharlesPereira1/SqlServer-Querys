@@ -1,0 +1,34 @@
+SELECT 'CENTRO DE CUSTOS: ' + CONVERT(VARCHAR,B.CODCCUSTO) + ' - ' + UPPER(CONVERT(VARCHAR,B.NOME)) 'CENTRO_DE_CUSTOS',
+       'PROJETO: ' + M.CODPRJ + ' - ' + UPPER(M.DESCRICAO)        'PROJETO',
+       M.IDPRJ,
+       B.CODCCUSTO,
+       B.CODCOLIGADA,
+       'COLIGADA: ' + A.NOME                                      'COLIGADA',
+       'CIDADE: ' + A.CIDADE                                      'CIDADE',
+	   'DATA INICIO E FIM PROGRAMADO: '+CONVERT(VARCHAR,MIN(D.DATAINICIOCALC),103)+' À '+CONVERT(VARCHAR,MAX(D.DATAFIMCALC),103),
+       'CNPJ: ' + A.CGC                                         'CGC'
+FROM   GCCUSTO B (NOLOCK)
+       INNER JOIN MPRJ M (NOLOCK)
+         ON M.CODCOLIGADA = B.CODCOLIGADA
+            AND M.CODCCUSTO = B.CODCCUSTO
+       INNER JOIN GCOLIGADA A (NOLOCK)
+         ON A.CODCOLIGADA = B.CODCOLIGADA
+       LEFT JOIN GIMAGEM C (NOLOCK)
+         ON C.ID = A.IDIMAGEM
+       LEFT JOIN MTAREFA D (NOLOCK)
+       	ON M.CODCOLIGADA = D.CODCOLIGADA
+       	AND M.IDPRJ = D.IDPRJ
+WHERE  B.CODCCUSTO = (SELECT M1.CODCCUSTO
+                      FROM   MPRJ M1 (NOLOCK)
+                      WHERE  M1.CODPRJ = 996
+                             AND M1.CODCOLIGADA = 1)
+       AND A.CODCOLIGADA = 1
+       GROUP BY 
+       B.CODCCUSTO, B.NOME,
+       M.CODPRJ, M.DESCRICAO,
+       M.IDPRJ,
+       B.CODCCUSTO,
+       B.CODCOLIGADA,
+       A.NOME,
+       A.CIDADE,
+       A.CGC

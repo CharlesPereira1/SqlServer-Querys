@@ -1,0 +1,9 @@
+select * from pparam
+
+update PPARAM set ANOCOMP='2019',
+MESCOMP=9, ANOCAIXA=2019, MESCAIXA=10
+
+
+select * from PVALFIX
+
+update PVALFIX set FINALVIGENCIA = '20191231' where ATUALIZAVIGENCIA=1
